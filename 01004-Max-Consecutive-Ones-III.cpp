@@ -38,33 +38,78 @@ using namespace std;
 
 class Solution {
 public:
-    int longestOnes(vector<int>& A, int K) {
-        int l=0,ans=0,cnt=0;
-        for(int r=0;r<A.size();r++){
-            if(A[r]==0)
-                cnt++;
-            if(cnt<=K)
-                ans=max(ans,r-l+1);
-            else{
-                if(A[l]==0)
-                    cnt--;
-                l++;
+    int longestOnes(vector<int> &A, int K) {
+        int n = A.size();
+        int l = 0;
+        int cnt = 0;
+        int res = 0;
+        for (int r = 0; r < n; ++r) {
+            if (A[r] == 0)
+                ++cnt;
+            while (cnt > K) {
+                if (A[l] == 0)
+                    --cnt;
+                ++l;
             }
+            res = max(res, r - l + 1);
         }
-        return ans;
+        return res;
     }
 };
 
 
-int main(int argc, char *argv[]){
+//class Solution {
+//public:
+//    int longestOnes(vector<int> &A, int K) {
+//        int n = A.size();
+//        int lo = K;
+//        int hi = n;
+//        while (lo < hi) {
+//            int mid = (lo + hi) / 2;
+//            bool flag = false;
+//            int cnt = 0;
+//            for (int i = 0; i < mid; ++i) {
+//                if (A[i] == 0)
+//                    ++cnt;
+//            }
+//            if (cnt <= K) {
+//                lo = mid + 1;
+//                continue;
+//            }
+//            for (int i = mid; i < n; ++i) {
+//                if (A[i] == 0)
+//                    ++cnt;
+//                if (A[i - mid] == 0)
+//                    --cnt;
+//                if (cnt <= K) {
+//                    lo = mid + 1;
+//                    flag = true;
+//                    break;
+//                }
+//            }
+//            if (flag)
+//                lo = mid + 1;
+//            else
+//                hi = mid;
+//        }
+//        return lo;
+//    }
+//};
 
-    vector<int> nums{1,1,1,0,0,0,1,1,1,1,0};
-    int k=2;
-    cout<<Solution().longestOnes(nums,k)<<endl;
 
-    nums={0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1};
-    k=3;
-    cout<<Solution().longestOnes(nums,k)<<endl;
+int main(int argc, char *argv[]) {
+
+    vector<int> nums{1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0};
+    int k = 2;
+    cout << Solution().longestOnes(nums, k) << endl;
+
+    nums = {0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1};
+    k = 3;
+    cout << Solution().longestOnes(nums, k) << endl;
+
+    nums = {0, 0, 0, 1};
+    k = 3;
+    cout << Solution().longestOnes(nums, k) << endl;
 
     return 0;
 }
