@@ -65,14 +65,5 @@ int main(int argc, char *argv[]){
     cout<<s<<endl;
     cout<<Solution().minCut(s)<<endl;
 
-    char a[4]="avd";
-    const char* p1=a;
-    p1++;
-    typedef char* pchar;
-    pchar p2=a;
-    p2++;
-
-    
-
     return 0;
 }
