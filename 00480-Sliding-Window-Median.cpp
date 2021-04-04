@@ -39,46 +39,100 @@ using namespace std;
 
 
 
+//class Solution {
+//public:
+//    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+//        multiset<int> g1,g2;
+//        for(int i=0;i<k;++i)
+//            g2.insert(nums[i]);
+//        for(int i=0;i<k/2;++i){
+//            g1.insert(*g2.begin());
+//            g2.erase(g2.begin());
+//        }
+//        vector<double> res;
+//        if(k&1)
+//            res.emplace_back(*g2.begin());
+//        else
+//            res.emplace_back(((double) *g1.rbegin() + *g2.begin()) / 2);
+//        for(int i=k;i<nums.size();++i) {
+//            if (nums[i] >= *g2.begin()) {
+//                g1.insert(*g2.begin());
+//                g2.erase(g2.begin());
+//                g2.insert(nums[i]);
+//            } else {
+//                g1.insert(nums[i]);
+//            }
+//            auto t = g1.find(nums[i - k]);
+//            if (t != g1.end()) {
+//                g1.erase(t);
+//            } else {
+//                g2.insert(*g1.rbegin());
+//                g1.erase(prev(g1.end()));
+//                t = g2.find(nums[i - k]);
+//                g2.erase(t);
+//            }
+//            if(k&1)
+//                res.emplace_back(*g2.begin());
+//            else
+//                res.emplace_back(((double) *g1.rbegin() + *g2.begin()) / 2);
+//        }
+//        return res;
+//    }
+//};
+
+
 class Solution {
 public:
     vector<double> medianSlidingWindow(vector<int>& nums, int k) {
-        multiset<int> g1,g2;
-        for(int i=0;i<k;++i)
-            g2.insert(nums[i]);
-        for(int i=0;i<k/2;++i){
-            g1.insert(*g2.begin());
-            g2.erase(g2.begin());
+        int n = nums.size();
+        vector<double> res(n - k + 1);
+        if (n == 1 || k == 1){
+            for(int i = 0; i < n; ++i)
+                res[i]=(double)nums[i];
+            return res;
         }
-        vector<double> res;
-        if(k&1)
-            res.emplace_back(*g2.begin());
+        multiset<int> g;
+        for (int i = 0; i < k; ++i)
+            g.insert(nums[i]);
+        auto it = g.begin();
+        for (int i = 0; i < k / 2; ++i)
+            it = next(it);
+        if (k & 1)
+            res[0] = *it;
         else
-            res.emplace_back(((double) *g1.rbegin() + *g2.begin()) / 2);
-        for(int i=k;i<nums.size();++i) {
-            if (nums[i] >= *g2.begin()) {
-                g1.insert(*g2.begin());
-                g2.erase(g2.begin());
-                g2.insert(nums[i]);
+            res[0] = ((double)*it + *prev(it)) / 2;
+        for (int i = k; i < n; ++i) {
+            if (nums[i - k] < *it && nums[i] < *it) {
+                g.erase(g.find(nums[i-k]));
+                g.insert(nums[i]);
+            } else if (nums[i - k] >= *it && nums[i] >= *it) {
+                it = prev(it);
+                auto t = g.upper_bound(nums[i - k]);
+                t = prev(t);
+                g.erase(t);
+                g.insert(nums[i]);
+                it = next(it);
+            } else if (nums[i - k] < *it && nums[i] >= *it) {
+                g.erase(g.find(nums[i-k]));
+                g.insert(nums[i]);
+                it = next(it);
             } else {
-                g1.insert(nums[i]);
+                g.insert(nums[i]);
+                it = prev(it);
+                auto t = g.upper_bound(nums[i - k]);
+                t = prev(t);
+                g.erase(t);
             }
-            auto t = g1.find(nums[i - k]);
-            if (t != g1.end()) {
-                g1.erase(t);
-            } else {
-                g2.insert(*g1.rbegin());
-                g1.erase(prev(g1.end()));
-                t = g2.find(nums[i - k]);
-                g2.erase(t);
-            }
-            if(k&1)
-                res.emplace_back(*g2.begin());
+            if (k & 1)
+                res[i-k+1] = *it;
             else
-                res.emplace_back(((double) *g1.rbegin() + *g2.begin()) / 2);
+                res[i-k+1] = ((double)*it + *prev(it)) / 2;
         }
+
         return res;
     }
 };
+
 
 int main(int argc, char* argv[]){
 

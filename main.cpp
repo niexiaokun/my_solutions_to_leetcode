@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#include <semaphore.h>
+#include <thread>
 
 using namespace std;
 
@@ -42,8 +44,9 @@ namespace utils {
 
 
 
-int main(int argc, char *argv[]){
+
+int main(int argc, char* argv[]) {
+
 
     return 0;
 }
-
