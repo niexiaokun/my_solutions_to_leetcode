@@ -200,7 +200,6 @@ add_executable(interview-17.22-Word-Transformer-LCCI  interview-17.22-Word-Trans
 add_executable(interview-17.24-Max-Submatrix-LCCI  interview-17.24-Max-Submatrix-LCCI.cpp)
 add_executable(LCP-03-Programmable-Robot  LCP-03-Programmable-Robot.cpp)
 add_executable(LCP-08  LCP-08.cpp)
-add_executable(main  main.cpp)
 add_executable(Offer-12-LCOF  Offer-12-LCOF.cpp)
 add_executable(Offer-17.23-Max-Black-Square-LCCI  Offer-17.23-Max-Black-Square-LCCI.cpp)
 add_executable(Offer-32-III-LCOF  Offer-32-III-LCOF.cpp)
@@ -208,5 +207,5 @@ add_executable(Offer-51-reversePairs  Offer-51-reversePairs.cpp)
 add_executable(Offer-52-LCOF  Offer-52-LCOF.cpp)
 add_executable(Offer-61-LCOF  Offer-61-LCOF.cpp)
 
-
+add_executable(main main.cpp)
 target_link_libraries(main pthread)

@@ -26,52 +26,47 @@ using namespace std;
 
 class Solution {
 private:
-    bool res;
-
-    void dfs(const vector<double> &nums) {
-        if (nums.size() == 1) {
-            if (abs(nums[0] - 24) < 1e-6)
+    bool res = false;
+    void deal(vector<double>& cards, vector<double>& nums, int p, int q){
+        int j = 0;
+        for(int i = 0; i < cards.size(); ++i){
+            if(i == p || i == q)
+                continue;
+            nums[++j] = cards[i];
+        }
+    }
+    void dfs(vector<double>& cards){
+        int n = cards.size();
+        if(n == 1){
+            if(abs(cards[0] - 24) < 1e-5)
                 res = true;
             return;
         }
-        int n = nums.size();
-        vector<bool> vis(n, true);
-        for (int i = 0; i < n - 1; i++) {
-            vis[i] = false;
-            for (int j = i + 1; j < n; ++j) {
-                if (j == i)
-                    continue;
-                vis[j] = false;
-                vector<double> tmp;
-                tmp.emplace_back((double) nums[i] + nums[j]);
-                for (int k = 0; k < n; ++k) {
-                    if (vis[k])
-                        tmp.emplace_back(nums[k]);
-                }
-                dfs(tmp);
-                tmp[0] = (double) nums[i] - nums[j];
-                dfs(tmp);
-                tmp[0] = (double) nums[j] - nums[i];
-                dfs(tmp);
-                tmp[0] = (double) nums[i] * nums[j];
-                dfs(tmp);
-                tmp[0] = (double) nums[i] / nums[j];
-                dfs(tmp);
-                tmp[0] = (double) nums[j] / nums[i];
-                dfs(tmp);
-                vis[j] = true;
+        for(int i = 0; i < cards.size(); ++i){
+            for(int j = i + 1; j < cards.size(); ++j){
+                vector<double> nums(n-1);
+                deal(cards, nums, i, j);
+                nums[0] = cards[i] + cards[j];
+                dfs(nums);
+                nums[0] = cards[i] - cards[j];
+                dfs(nums);
+                nums[0] = cards[j] - cards[i];
+                dfs(nums);
+                nums[0] = cards[i] * cards[j];
+                dfs(nums);
+                nums[0] = cards[i] / cards[j];
+                dfs(nums);
+                nums[0] = cards[j] / cards[i];
+                dfs(nums);
             }
-            vis[i] = true;
         }
     }
-
 public:
-    bool judgePoint24(vector<int> &nums) {
-        int n = nums.size();
-        vector<double> tmp(n);
-        for (int i = 0; i < n; ++i)
-            tmp[i] = nums[i];
-        dfs(tmp);
+    bool judgePoint24(vector<int>& cards) {
+        vector<double> nums(4);
+        for(int i = 0; i < 4; ++i)
+            nums[i] = cards[i];
+        dfs(nums);
         return res;
     }
 };
